@@ -7,3 +7,4 @@ class Todo(Model):
     title = CharField(max_length=100, null=False)
     description = CharField(max_length=200)
     done = BooleanField(default=False)
+    userId = CharField(max_length=50)

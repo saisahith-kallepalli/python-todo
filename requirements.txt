@@ -1,3 +1,9 @@
 fastAPI
 uvicorn
 tortoise-orm
+passlib[bcrypt]
+PyJWT 
+python-multipart
+python-dotenv
+python-jose[cryptography]
+bcrypt<4.0.0
