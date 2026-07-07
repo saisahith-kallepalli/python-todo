@@ -1,5 +1,5 @@
 from tortoise.models import Model
-from tortoise.fields import CharField, IntField, BooleanField
+from tortoise.fields import CharField, IntField, BooleanField, ForeignKeyField
 
 
 class Todo(Model):
@@ -7,4 +7,4 @@ class Todo(Model):
     title = CharField(max_length=100, null=False)
     description = CharField(max_length=200)
     done = BooleanField(default=False)
-    userId = CharField(max_length=50)
+    user = ForeignKeyField('models.User', related_name='todos')

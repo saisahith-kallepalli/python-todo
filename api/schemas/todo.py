@@ -10,6 +10,7 @@ class PostToDo(BaseModel):
     title: str = Field(..., min_length=3, max_length=100)
     description: str = Field(..., min_length=3, max_length=200)
     done: bool = False
+    user: str
 
 
 class PutToDo(BaseModel):

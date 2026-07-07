@@ -1,8 +1,11 @@
-from fastapi import APIRouter, status, HTTPException
+from fastapi import APIRouter, status, HTTPException, Depends
 from api.schemas.todo import GetToDo, PostToDo, PutToDo
 from api.models.todo import Todo
+from app.auth.user import get_current_user
 
-todo_router = APIRouter(prefix="/api/todo", tags=["Todo"])
+todo_router = APIRouter(
+    prefix="/api/todo", tags=["Todo"], dependencies=[Depends(get_current_user)]
+)
 
 
 @todo_router.get("/")
@@ -12,9 +15,9 @@ async def all_todos():
 
 
 @todo_router.post("/create")
-async def create_todo(body: PostToDo):
+async def create_todo(body: PostToDo, current_user=Depends(get_current_user)):
     print(body)
-    row = await Todo.create(**body.dict(exclude_unset=True))
+    row = await Todo.create(**body.dict(exclude_unset=True), user=current_user.id)
     return await GetToDo.from_tortoise_orm(row)
 
 
