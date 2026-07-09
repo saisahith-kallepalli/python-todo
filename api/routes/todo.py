@@ -26,7 +26,7 @@ async def all_todos():
 @todo_router.post("/create")
 async def create_todo(body: PostToDo, current_user=Depends(get_current_user)):
     print(body)
-    row = await Todo.create(**body.dict(exclude_unset=True), user=current_user.id)
+    row = await Todo.create(**body.dict(exclude_unset=True), user=current_user)
     todo_data = dict(await GetToDo.from_tortoise_orm(row))
     await manager.send_personal_message(
         {"event": "todo_created", "data": todo_data}, current_user.id
@@ -35,8 +35,7 @@ async def create_todo(body: PostToDo, current_user=Depends(get_current_user)):
 
 
 @todo_router.put("/update/{id}")
-async def update_todo(id: int, body: PutToDo):
-    current_user = Depends(get_current_user)
+async def update_todo(id: int, body: PutToDo, current_user=Depends(get_current_user)):
     data = body.dict(exclude_unset=True)
     exists = await Todo.filter(id=id).exists()
     if not exists:
@@ -71,4 +70,4 @@ async def websocket_endpoint(websocket: WebSocket, user=Depends(get_current_user
         while True:
             await websocket.receive_text()
     except WebSocketDisconnect:
-        manager.disconnect(websocket, user.id)
+        await manager.disconnect(websocket, user.id)

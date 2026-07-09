@@ -38,11 +38,7 @@ async def login(body: OAuth2PasswordRequestForm = Depends()):
     else:
         token = create_access_token(
             data={
-                "sub": {
-                    "email": user.email,
-                    "id": user.id,
-                    "username": user.username,
-                }
+                "sub": str(user.id)
             }
         )
         return {"access_token": token, "token_type": "bearer"}
