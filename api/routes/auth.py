@@ -16,9 +16,7 @@ async def create_user(body: UserCreate):
     print(body)
     exist = await User.filter(username=body.username).exists()
     if exist:
-        raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND, detail="Todo not found"
-        )
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="User found")
     else:
         body.password = get_password_hash(body.password)
         row = await User.create(id=str(uuid.uuid4()), **body.dict(exclude_unset=True))
